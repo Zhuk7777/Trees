@@ -161,7 +161,7 @@ bool BinaryTree::search(std::string elem)
 	return 0;
 }
 
-TTree BinaryTree::searchDomestic(std::string elem)
+BinaryTree::TTree BinaryTree::searchDomestic(std::string elem)
 {
 	if (root)
 	{
@@ -241,7 +241,7 @@ int BinaryTree::dist(std::string a, std::string b, int i, int j)
 
 	else {
 
-		if (a[i] == b[j])//если последние символы одинаковые, то не трогаем их и переходим к подстрокам до этих символов
+		if (a[i-1] == b[j-1])//если последние символы одинаковые, то не трогаем их и переходим к подстрокам до этих символов
 			return dist(a, b, i - 1, j - 1);
 
 		else
@@ -254,8 +254,8 @@ int BinaryTree::dist(std::string a, std::string b, int i, int j)
 
 double BinaryTree::similarity(std::string a, std::string b)
 {
-	int i = a.size() - 1;
-	int j = b.size() - 1;
+	int i = a.size();
+	int j = b.size();
 
 	double distance = dist(a, b, i, j);
 	double bigger = std::max(a.size(), b.size());
@@ -284,8 +284,7 @@ bool BinaryTree::searchWordDomes(TTree obj, std::string word)
 		percent = similarity(obj->data, word);
 		if (percent >= 70.0)
 			return true;
-		searchWordDomes(obj->left, word);
-		searchWordDomes(obj->right, word);
+		return searchWordDomes(obj->left, word) || searchWordDomes(obj->right, word);
 	}
 	return false;
 }

@@ -6,7 +6,7 @@ void createTree(BinaryTree& tree, std::ifstream& fin)
 {
 	std::string word;
 
-	while (getline(fin, word))
+	while (getline(fin, word)&&word!="")
 	{
 		tree.insertElem(word);
 	}

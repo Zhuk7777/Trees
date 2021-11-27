@@ -1,18 +1,19 @@
 #pragma once
 #include<string>
 
-struct TreeNode
-{
-	std::string data;
-	TreeNode* left;
-	TreeNode* right;
-
-};
-
-typedef TreeNode* TTree;
-
 class BinaryTree
 {
+
+	struct TreeNode
+	{
+		std::string data;
+		TreeNode* left;
+		TreeNode* right;
+
+	};
+
+	typedef TreeNode* TTree;
+
 	TTree root;
 	TTree p;
 
