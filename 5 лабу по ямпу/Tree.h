@@ -18,9 +18,17 @@ class BinaryTree
 
 	std::string findSuccessor(TTree& obj);
 	void normalize();
+
 	TTree searchDomestic(std::string elem);
+	bool searchWordDomes(TTree obj, std::string word);
+
+	void printTreeDomestic(TTree obj, int ind);
+
 	void clear(TTree& obj);
 	void copy(TTree obj, TTree& newRoot);
+
+	double similarity(std::string a, std::string b);
+	int dist(std::string a, std::string b, int i, int j);
 
 public:
 
@@ -38,5 +46,7 @@ public:
 
 	bool search(std::string elem);
 
-	void printTree(TTree obj, int ind);
+	void printTree(int ind);
+
+	void searchWord(std::string word);
 };

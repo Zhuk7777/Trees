@@ -76,24 +76,35 @@ void BinaryTree::insertElem(std::string elem)
 		root->data = elem;
 		root->left = nullptr;
 		root->right = nullptr;
-
+		normalize();
 	}
-	else
-	{
+	else {
+
+		int ind = 0;
+		TTree cur = nullptr;
+
 		while (p)
 		{
-			if (elem < p->data)
+			cur = p;
+
+			ind = elem.compare(p->data);
+
+			if (ind == -1)//если меньше
 				p = p->left;
-			if (elem > p->data)
+			if (ind == 1)//если больше
 				p = p->right;
 		}
+
 		p = new TreeNode;
 		p->data = elem;
 		p->left = nullptr;
 		p->right = nullptr;
+		if (ind == -1)
+			cur->left = p;
+		if (ind == 1)
+			cur->right = p;
+		normalize();
 	}
-
-	normalize();
 }
 
 void BinaryTree::deleteElem(std::string elem)
@@ -170,7 +181,13 @@ TTree BinaryTree::searchDomestic(std::string elem)
 	return nullptr;
 }
 
-void BinaryTree::printTree(TTree obj, int ind)//1-прямой,2-симметричный, 3-обратный
+void BinaryTree::printTree(int ind)
+{
+	printTreeDomestic(p, ind);
+	normalize();
+}
+
+void BinaryTree::printTreeDomestic(TTree obj, int ind)//1-прямой,2-симметричный, 3-обратный
 {
 	switch (ind)
 	{
@@ -178,25 +195,25 @@ void BinaryTree::printTree(TTree obj, int ind)//1-прямой,2-симметричный, 3-обрат
 		if (obj)
 		{
 			std::cout << obj->data << " ";
-			printTree(obj->left, ind);
-			printTree(obj->right, ind);
+			printTreeDomestic(obj->left, ind);
+			printTreeDomestic(obj->right, ind);
 		}
 		break;
 
 	case 2:
 		if (obj)
 		{
-			printTree(obj->left, ind);
+			printTreeDomestic(obj->left, ind);
 			std::cout << obj->data << " ";
-			printTree(obj->right, ind);
+			printTreeDomestic(obj->right, ind);
 		}
 		break;
 
 	case 3:
 		if (obj)
 		{
-			printTree(obj->left, ind);
-			printTree(obj->right, ind);
+			printTreeDomestic(obj->left, ind);
+			printTreeDomestic(obj->right, ind);
 			std::cout << obj->data << " ";
 		}
 		break;
@@ -215,4 +232,60 @@ std::string BinaryTree::findSuccessor(TTree& obj)
 	}
 	else
 		findSuccessor(obj->left);
+}
+
+int BinaryTree::dist(std::string a, std::string b, int i, int j)
+{
+	if (i == 0 || j == 0)//если строка пустая, то расстояние равно либо j-му количеству вставок либо i раз удалить элемент из строки 
+		return std::max(i, j);
+
+	else {
+
+		if (a[i] == b[j])//если последние символы одинаковые, то не трогаем их и переходим к подстрокам до этих символов
+			return dist(a, b, i - 1, j - 1);
+
+		else
+			return 1 + std::min(dist(a, b, i - 1, j),//удаление символа
+				std::min(dist(a, b, i, j - 1),//вставка символа
+					dist(a, b, i - 1, j - 1)));//замена символа
+
+	}
+}
+
+double BinaryTree::similarity(std::string a, std::string b)
+{
+	int i = a.size() - 1;
+	int j = b.size() - 1;
+
+	double distance = dist(a, b, i, j);
+	double bigger = std::max(a.size(), b.size());
+	double pct = ((bigger - distance) / bigger) * 100;
+
+	return pct;
+}
+
+void BinaryTree::searchWord(std::string word)
+{
+	bool ind = searchWordDomes(p, word);
+
+	if (ind)
+		std::cout << "Есть\n";
+	else
+		std::cout << "Нет\n";
+
+	normalize();
+}
+
+bool BinaryTree::searchWordDomes(TTree obj, std::string word)
+{
+	double percent;
+	if (obj)
+	{
+		percent = similarity(obj->data, word);
+		if (percent >= 70.0)
+			return true;
+		searchWordDomes(obj->left, word);
+		searchWordDomes(obj->right, word);
+	}
+	return false;
 }
