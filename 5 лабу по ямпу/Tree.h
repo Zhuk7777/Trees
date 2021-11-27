@@ -20,7 +20,7 @@ class BinaryTree
 	void normalize();
 	TTree searchDomestic(std::string elem);
 	void clear(TTree& obj);
-	int copy(TTree obj, TTree& newRoot);
+	void copy(TTree obj, TTree& newRoot);
 
 public:
 

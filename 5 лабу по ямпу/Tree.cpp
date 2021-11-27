@@ -48,7 +48,7 @@ void BinaryTree::clear(TTree& obj)
 	}
 }
 
-int BinaryTree::copy(TTree obj,TTree & newRoot)
+void BinaryTree::copy(TTree obj,TTree & newRoot)
 {
 	if (obj)
 	{
@@ -184,7 +184,22 @@ void BinaryTree::printTree(TTree obj, int ind)//1-прямой,2-симметричный, 3-обрат
 		break;
 
 	case 2:
+		if (obj)
+		{
+			printTree(obj->left, ind);
+			std::cout << obj->data << " ";
+			printTree(obj->right, ind);
+		}
+		break;
 
+	case 3:
+		if (obj)
+		{
+			printTree(obj->left, ind);
+			printTree(obj->right, ind);
+			std::cout << obj->data << " ";
+		}
+		break;
 	}
 }
 
